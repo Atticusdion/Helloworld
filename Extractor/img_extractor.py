@@ -8,8 +8,6 @@ image = Image.open('E:\Helloworld\Extractor\W2.jpg')
 
 ocr_text = pytesseract.image_to_string(image)
 
-print(ocr_text)
-
 def extract_w2_info(text):
     employee_match = re.search(r"2\. Employee Name and Address\.\n(.*?)\n(.*?)\n(.*?)\n(.*?)\n", text, re.DOTALL)
     wages_match  = re.search(r'Pay\s+(\d+,\d+\.\d+)', text)
@@ -34,11 +32,13 @@ def extract_w2_info(text):
     else:
         wages = None
 
-    return {"name": employee_name, 
-            "address": employee_address, 
-            "wages": wages, 
-            "work_name": employer_name, 
-            "work_address": employer_address}
+    return {
+        'name': employee_name, 
+        'address': employee_address, 
+        'wages': wages, 
+        'work_name': employer_name, 
+        'work_address': employer_address
+    }
 
 
-info = extract_w2_info(ocr_text)
+print(extract_w2_info(ocr_text))
