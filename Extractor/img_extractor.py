@@ -34,13 +34,11 @@ def extract_w2_info(text):
     else:
         wages = None
 
-    return {"name": employee_name, "address": employee_address, "wages": wages, "work_name": employer_name, "work_address": employer_address}
+    return {"name": employee_name, 
+            "address": employee_address, 
+            "wages": wages, 
+            "work_name": employer_name, 
+            "work_address": employer_address}
 
 
 info = extract_w2_info(ocr_text)
-
-print(f"Name: {info['name']}")
-print(f"Address: {info['address']}")
-print(f"Wages: {info['wages']}")
-print(f"Company name: {info['work_name']}")
-print(f"Company address: {info['work_address']}")
