@@ -19,29 +19,27 @@ def directory(destination, details, name):
 def extract_payslip_info(text, destination):
 
     lines = text.split('\n')
+
+    address = None
     
-    for line in lines:
+    for index, line in enumerate(lines):
         if 'Employee Name :' in line:
             employee_name = line.split('Employee Name :')[1].strip()
         
-        elif 'Basic Pay' in line:
-            basic_pay = float(re.findall(r'\d+', line)[0])
+        elif 'Total Earnings' in line:
+            total_pay = float(re.findall(r'\d+', line)[0])
         
         elif 'Net Pay' in line:
             net_pay = float(line.split()[2])
         
         elif 'House Rent Allowance' in line:
             house_rent_allowance = float(re.findall(r'\d+', line)[0])
-        
-        elif 'Zoonodle Inc' in line:
-            address = line.strip()
     
     payslip_details = {
         'employee_name': employee_name,
-        'basic_pay': basic_pay,
+        'total_pay': total_pay,
         'net_pay': net_pay,
-        'house_rent_allowance': house_rent_allowance,
-        'address': address
+        'house_rent_allowance': house_rent_allowance
     }
 
     directory(destination, payslip_details, employee_name)
@@ -68,7 +66,7 @@ def extract_w2_info(text, destination):
         employer_address = None
 
     if wages_match:
-        wages = wages_match.group(1)
+        wages = float(wages_match.group(1).replace(',', ''))
     else:
         wages = None
 
