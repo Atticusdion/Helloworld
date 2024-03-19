@@ -8,5 +8,5 @@ image = Image.open('E:\Helloworld\Extractor\W2.jpg')
 
 ocr_text = pytesseract.image_to_string(image)
 
-folder = 'E:\Helloworld\Extractor\Extractions\Image'
+folder = 'Extractor\Extractions\Image'
 extract_w2_info(ocr_text, folder)

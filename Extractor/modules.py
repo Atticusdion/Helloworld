@@ -1,10 +1,17 @@
 import re
 import json
 import os
+import string
+
+def sanitize_name(name):
+    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+    sanitized = ''.join(c for c in name if c in valid_chars)
+    sanitized = sanitized.replace(' ', '_')
+    return sanitized
 
 def directory(destination, details, name):
 
-    filename = f"{name.replace(' ', '_')}_extractions.json"
+    filename = f"{sanitize_name(name)}_extractions.json"
     destination_path = os.path.join(destination, filename)
     with open(destination_path, 'w') as file:
         json.dump(details, file, indent=4)
