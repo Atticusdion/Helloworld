@@ -46,6 +46,7 @@ def is_encrypted(file_path, file_ext):
             if pdf_reader.is_encrypted:
                 raise Exception("Error: Uploaded document cannot be encrypted or password protected.")
 
+## Combined check function
 
 def file_valid(file_path):
 
