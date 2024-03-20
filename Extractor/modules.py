@@ -5,11 +5,15 @@ import string
 import pandas as pd
 import pdfplumber
 
+## File name sanitizer
+
 def sanitize_name(name):
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
     sanitized = ''.join(c for c in name if c in valid_chars)
     sanitized = sanitized.replace(' ', '_')
     return sanitized
+
+## Extractions dumper
 
 def directory(destination, details, name):
 
@@ -18,7 +22,9 @@ def directory(destination, details, name):
     with open(destination_path, 'w') as file:
         json.dump(details, file, indent=4)
 
-def extract_payslip_info(text, destination):
+## PDF info extarctor
+
+def extract_pdf_info(text, destination):
 
     lines = text.split('\n')
 
@@ -37,18 +43,20 @@ def extract_payslip_info(text, destination):
         elif 'House Rent Allowance' in line:
             house_rent_allowance = float(re.findall(r'\d+', line)[0])
     
-    payslip_details = {
+    pdf_details = {
         'employee_name': employee_name,
         'total_pay': total_pay,
         'net_pay': net_pay,
         'house_rent_allowance': house_rent_allowance
     }
 
-    directory(destination, payslip_details, employee_name)
+    directory(destination, pdf_details, employee_name)
 
-    return payslip_details
+    return pdf_details
 
-def extract_w2_info(text, destination):
+## Image info extractor
+
+def extract_img_info(text, destination):
     employee_match = re.search(r"2\. Employee Name and Address\.\n(.*?)\n(.*?)\n(.*?)\n(.*?)\n", text, re.DOTALL)
     wages_match  = re.search(r'Pay\s+(\d+,\d+\.\d+)', text)
     employer_match  = re.search(r"© Employer's name, address, and ZIP code\n(.*?)\n(.*?)\n(.*?)\n", text, re.DOTALL)
@@ -72,7 +80,7 @@ def extract_w2_info(text, destination):
     else:
         wages = None
 
-    w2_details = {
+    img_details = {
         'name': employee_name, 
         'address': employee_address, 
         'wages': wages, 
@@ -80,9 +88,11 @@ def extract_w2_info(text, destination):
         'work_address': employer_address
     }
 
-    directory(destination, w2_details, employee_name)
+    directory(destination, img_details, employee_name)
 
-    return w2_details
+    return img_details
+
+## Table info from PDF -> CSV
 
 def extract_csv(file_path):
 
