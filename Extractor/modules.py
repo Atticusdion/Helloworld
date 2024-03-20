@@ -2,6 +2,8 @@ import re
 import json
 import os
 import string
+import pandas as pd
+import pdfplumber
 
 def sanitize_name(name):
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
@@ -81,3 +83,26 @@ def extract_w2_info(text, destination):
     directory(destination, w2_details, employee_name)
 
     return w2_details
+
+def extract_csv(file_path):
+
+    with pdfplumber.open(file_path) as pdf:
+        table = pdf.pages[0].extract_table()
+
+    rows = []
+
+    for row in table[1:]:
+        subrows = [[] for _ in range(max(len(cell.split('\n')) for cell in row))]
+        for i, cell in enumerate(row):
+            values =  cell.split('\n')
+            for j, value in enumerate(values):
+                subrows[j].append(value)
+        
+        rows.extend(subrows)
+
+    df = pd.DataFrame(rows, columns = table[0])
+
+    df.to_csv('PaySlip1_table.csv', index = False)
+
+    return df
+
