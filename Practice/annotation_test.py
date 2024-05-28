@@ -1,4 +1,4 @@
-path = 'Practice/coding_qual_input.txt'
+path = 'Annotation/coding_qual_input.txt'
 
 def decode(message_file):
 
